@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+import { RaisedButton, Card, TextField } from 'material-ui'
 import io from 'socket.io-client'
+
+import MessageList from './messageList'
 
 const socket = io('localhost:4001')
 
@@ -35,39 +38,26 @@ class Chat extends Component {
 
   render() {
     return (
-      <div>
-        <div className="messages">
-          {this.state.messages.map(message => {
-            return (
-              <div key={message.id}>
-                {message.author}: {message.message}
-              </div>
-            )
-          })}
-        </div>
-        <div className="card-footer">
-          <input
-            type="text"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={ev => this.setState({ username: ev.target.value })}
-            className="form-control"
-          />
-          <br />
-          <input
-            type="text"
-            placeholder="Message"
-            className="form-control"
-            value={this.state.message}
-            onChange={ev => this.setState({ message: ev.target.value })}
-          />
-          <br />
-          <button
+      <div className="test">
+        <Card>
+          <MessageList messages={this.state.messages} />
+        </Card>
+        <TextField
+          hintText="Username"
+          value={this.state.username}
+          onChange={ev => this.setState({ username: ev.target.value })}
+        />
+        <TextField
+          hintText="Message"
+          value={this.state.message}
+          onChange={ev => this.setState({ message: ev.target.value })}
+        />
+        <div>
+          <RaisedButton
+            label="Send"
+            primary={true}
             onClick={this.sendMessage}
-            className="btn btn-primary form-control"
-          >
-            Send
-          </button>
+          />
         </div>
       </div>
     )
