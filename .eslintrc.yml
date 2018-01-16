@@ -24,3 +24,4 @@ rules:
     - 2
     - max: 1
   react/prefer-stateless-function: 1
+  react/prop-types: 0
