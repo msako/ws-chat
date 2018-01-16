@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { RaisedButton, Card, TextField } from 'material-ui'
+import { RaisedButton, Card, TextField, List, ListItem } from 'material-ui'
 import io from 'socket.io-client'
 
 import MessageList from './messageList'
@@ -42,25 +42,40 @@ class Chat extends Component {
         <Card>
           <MessageList messages={this.state.messages} />
         </Card>
-        <TextField
-          hintText="Username"
-          value={this.state.username}
-          onChange={ev => this.setState({ username: ev.target.value })}
-        />
-        <TextField
-          hintText="Message"
-          value={this.state.message}
-          onChange={ev => this.setState({ message: ev.target.value })}
-        />
-        <div>
-          <RaisedButton
-            label="Send"
-            primary={true}
-            onClick={this.sendMessage}
-          />
-        </div>
+        <Card>
+          <div style={styles.container}>
+            <TextField
+              hintText="Username"
+              value={this.state.username}
+              onChange={ev => this.setState({ username: ev.target.value })}
+            />
+
+            <TextField
+              hintText="Message"
+              value={this.state.message}
+              onChange={ev => this.setState({ message: ev.target.value })}
+            />
+
+            <RaisedButton
+              label="Send"
+              primary={true}
+              onClick={this.sendMessage}
+              style={{ marginTop: '16px' }}
+            />
+          </div>
+        </Card>
       </div>
     )
+  }
+}
+
+const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'column',
+    margin: '12px',
+    padding: '12px'
   }
 }
 
