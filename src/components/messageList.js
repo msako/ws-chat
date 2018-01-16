@@ -4,15 +4,10 @@ import format from 'date-fns/format'
 import Message from './message'
 
 class MessageList extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   formatDate(timestamp) {
     return format(new Date(timestamp), 'MM/DD HH:mm')
   }
-
-  render() {
+  renderList() {
     return (
       <List>
         {this.props.messages.map((message, index) => {
@@ -26,6 +21,22 @@ class MessageList extends Component {
         })}
       </List>
     )
+  }
+
+  renderNotice() {
+    return (
+      <List>
+        <ListItem disabled={true}>
+          <span>Start chat...</span>
+        </ListItem>
+      </List>
+    )
+  }
+
+  render() {
+    return this.props.messages.length > 0
+      ? this.renderList()
+      : this.renderNotice()
   }
 }
 
