@@ -44,7 +44,8 @@ const styles = {
   date: {
     fontSize: '0.8em',
     color: 'gray',
-    marginRight: 10
+    marginRight: '12px',
+    paddingLeft: '12px'
   },
   author: {
     fontWeight: 'bold'
