@@ -1,61 +1,54 @@
 import React, { Component } from 'react'
-import { RaisedButton, Card, TextField, List, ListItem } from 'material-ui'
+import { RaisedButton, Card, TextField } from 'material-ui'
 import io from 'socket.io-client'
-
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from '../reducers/chat'
 import MessageList from './messageList'
 
 const socket = io('localhost:4001')
 
 class Chat extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      messages: [],
-      username: '',
-      message: ''
-    }
-  }
-
   componentDidMount() {
     socket.on('RECEIVE_MESSAGE', message => {
-      this.receiveMessage(message)
+      this.props.addMessage(message)
     })
-  }
-
-  receiveMessage(message) {
-    console.log(message)
-    this.setState({ messages: [...this.state.messages, message] })
   }
 
   sendMessage = () => {
     socket.emit('SEND_MESSAGE', {
-      author: this.state.username,
-      message: this.state.message
+      author: this.props.chat.username,
+      message: this.props.chat.message
     })
-    this.setState({ message: '' })
+    this.props.sendMessage()
+  }
+
+  onMessageChanged = e => {
+    this.props.updateMessage(e.target.value)
+  }
+
+  onUsernameChanged = e => {
+    this.props.updateUsername(e.target.value)
   }
 
   render() {
     return (
-      <div className="test">
+      <div>
         <Card>
-          <MessageList messages={this.state.messages} />
+          <MessageList messages={this.props.chat.messages} />
         </Card>
         <Card>
           <div style={styles.container}>
             <TextField
               hintText="Username"
-              value={this.state.username}
-              onChange={ev => this.setState({ username: ev.target.value })}
+              value={this.props.chat.username}
+              onChange={this.onUsernameChanged}
             />
-
             <TextField
               hintText="Message"
-              value={this.state.message}
-              onChange={ev => this.setState({ message: ev.target.value })}
+              value={this.props.chat.message}
+              onChange={this.onMessageChanged}
             />
-
             <RaisedButton
               label="Send"
               primary={true}
@@ -79,4 +72,12 @@ const styles = {
   }
 }
 
-export default Chat
+const mapStateToPros = ({ chat }) => {
+  return { chat }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(actions, dispatch)
+}
+
+export default connect(mapStateToPros, mapDispatchToProps)(Chat)
