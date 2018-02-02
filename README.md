@@ -2,7 +2,8 @@
 
 ## 1. With Docker
 
-Please install docker for mac first.
+Please install docker for mac first if it's not installed.  
+https://docs.docker.com/docker-for-mac/install/
 
 ```shell
 docker-compose up --build
@@ -10,7 +11,8 @@ docker-compose up --build
 
 ## 2. Without Docker
 
-Please install yarn.
+Please install yarn if it's not installed.  
+https://yarnpkg.com
 
 ### Start up the server app
 
