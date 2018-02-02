@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import { actions } from '../reducers/chat'
 import MessageList from './components/messageList'
 
-const socket = io('localhost:4001')
+const socket = io('https://localhost:4001')
 
 class Chat extends Component {
   componentDidMount() {
