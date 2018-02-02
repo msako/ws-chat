@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+
+  app:
+    build: ./server
+    image: express_chat
+    volumes:
+      - ./server:/data/app
+      - /data/app/node_modules
+    ports:
+      - 8080:8080
+
+  frontend:
+    build: ./frontend
+    image: frontend_chat
+    volumes:
+      - ./frontend/src:/data/app/src
+      - ./frontend/public:/data/app/public
+    ports:
+      - 3000:3000
+
+  nginx:
+    build: ./dockers/nginx
+    image: nginx_chat
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - app
+
+#  wowza:
+#    build: ./dockers/wowza
+#    image: wowza_chat
+#    environment:
+#      - WSE_MGR_USER=admin
+#      - WSE_MGR_PASS=admin
+#      - WSE_LIC=
+#    ports:
+#      - 1935:1935
+#      - 8086:8086
+#      - 8087:8087
+#      - 8088:8088
+
+  redis:
+    image: redis:3.2.11-alpine
+    ports:
+      - 6379:6379
