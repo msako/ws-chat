@@ -9,6 +9,12 @@ https://docs.docker.com/docker-for-mac/install/
 docker-compose up --build
 ```
 
+Open https://localhost:3000
+
+### 1.2 Diagram
+
+react(https://localhost:3000) --> nginx_proxy(https://localhost) --> node(http://localhost:8080)
+
 ## 2. Without Docker
 
 Please install yarn if it's not installed.  
@@ -21,6 +27,8 @@ cd servers
 yarn
 npm run dev
 ```
+
+If nginx is not running to proxy SSL, make sure that your server is running at port 443. The default port is set to 8080.
 
 ### Start up the client app
 
