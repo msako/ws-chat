@@ -1,42 +1,36 @@
 ## Quick Start
 
-## 1. With Docker
+### Start up the app
 
-Please install docker for mac first if it's not installed.  
-https://docs.docker.com/docker-for-mac/install/
+Please install docker first if it's not installed.  
+https://docs.docker.com/install/
+
 
 ```shell
 docker-compose up --build
 ```
 
-Open https://localhost:3000
+Open https://localhost:3000   
+That's it!
 
-### 1.2 Diagram
+## Applications
+
+* react
+ * frontend 
+* node
+ * api server
+ * websocket(socket.io)
+* redis
+ * caching
+ * Pub/Sub
+* nginx
+ * SSL reverse proxy
+ * serving static files
+ * content caching
+
+### Diagram
 
 react(https://localhost:3000) --> nginx_proxy(https://localhost) --> node(http://localhost:8080)
-
-## 2. Without Docker
-
-Please install yarn if it's not installed.  
-https://yarnpkg.com
-
-### Start up the server app
-
-```shell
-cd servers
-yarn
-npm run dev
-```
-
-If nginx is not running to proxy SSL, make sure that your server is running at port 443. The default port is set to 8080.
-
-### Start up the client app
-
-```shell
-cd frontend
-yarn
-npm start
-```
 
 ## Editor setup
 
