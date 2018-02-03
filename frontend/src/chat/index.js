@@ -6,19 +6,34 @@ import { bindActionCreators } from 'redux'
 import { actions } from '../reducers/chat'
 import MessageList from './components/messageList'
 
-const socket = io(process.env.REACT_APP_WS_URL)
-
 class Chat extends Component {
+  componentWillMount() {}
+
   componentDidMount() {
-    socket.on('RECEIVE_MESSAGE', message => {
+    this.socket = io(process.env.REACT_APP_WS_URL)
+
+    const { id } = this.props.match.params
+    const socket = this.socket
+
+    socket.on('connect', () => {
+      this.props.setRoom(id)
+      socket.emit('room', id)
+    })
+
+    socket.on('receive_message', message => {
       this.props.addMessage(message)
     })
   }
 
   sendMessage = () => {
-    socket.emit('SEND_MESSAGE', {
+    const { username, message } = this.props.chat
+    if (message === '' || username === '') {
+      return
+    }
+    this.socket.emit('send_message', {
       author: this.props.chat.username,
-      message: this.props.chat.message
+      message: this.props.chat.message,
+      room: this.props.chat.room
     })
     this.props.sendMessage()
   }
@@ -53,7 +68,7 @@ class Chat extends Component {
               label="Send"
               primary={true}
               onClick={this.sendMessage}
-              style={{ marginTop: '16px' }}
+              style={styles.button}
             />
           </div>
         </Card>
@@ -69,6 +84,9 @@ const styles = {
     flexDirection: 'column',
     margin: '12px',
     padding: '12px'
+  },
+  button: {
+    marginTop: '16px'
   }
 }
 
