@@ -2,13 +2,15 @@ export const types = {
   ADD_MESSAGE: 'ADD_MESSAGE',
   SEND_MESSAGE: 'SEND_MESSAGE',
   UPDATE_MESSAGE: 'UPDATE_MESSAGE',
-  UPDATE_USERNAME: 'UPDATE_USERNAME'
+  UPDATE_USERNAME: 'UPDATE_USERNAME',
+  SET_ROOM: 'SET_ROOM'
 }
 
 export const initialState = {
   messages: [],
   message: '',
-  username: ''
+  username: '',
+  room: ''
 }
 
 // Reducers
@@ -22,6 +24,8 @@ export default (state = initialState, action) => {
       return { ...state, message: action.payload }
     case types.UPDATE_USERNAME:
       return { ...state, username: action.payload }
+    case types.SET_ROOM:
+      return { ...state, room: action.payload }
     default:
       return state
   }
@@ -43,5 +47,9 @@ export const actions = {
   updateUsername: name => ({
     type: types.UPDATE_USERNAME,
     payload: name
+  }),
+  setRoom: room => ({
+    type: types.SET_ROOM,
+    payload: room
   })
 }
