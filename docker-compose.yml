@@ -4,21 +4,28 @@ services:
 
   app:
     build: ./server
-    image: express_chat
+    image: app_chat
     volumes:
       - ./server:/data/app
-      - /data/app/node_modules
     ports:
       - 8080:8080
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      - redis
+    links:
+      - redis
+    networks:
+      - webnet
 
   frontend:
     build: ./frontend
     image: frontend_chat
     volumes:
       - ./frontend/src:/data/app/src
-      - ./frontend/public:/data/app/public
     ports:
       - 3000:3000
+      - 35729:35729
 
   nginx:
     build: ./dockers/nginx
@@ -27,8 +34,17 @@ services:
     ports:
       - 80:80
       - 443:443
-    links:
+    depends_on:
       - app
+    networks:
+      - webnet
+
+  redis:
+    image: redis:3.2.11-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - webnet
 
 #  wowza:
 #    build: ./dockers/wowza
@@ -43,7 +59,5 @@ services:
 #      - 8087:8087
 #      - 8088:8088
 
-  redis:
-    image: redis:3.2.11-alpine
-    ports:
-      - 6379:6379
+networks:
+  webnet:
