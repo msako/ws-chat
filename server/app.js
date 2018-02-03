@@ -1,15 +1,15 @@
 const express = require('express')
-const socket = require('socket.io')
-const fs = require('fs')
-
-const app = express()
+const redis = require('socket.io-redis')
 const port = 8080
+const app = express()
 
 server = app.listen(port, () => {
   console.log('server is running on port ', port)
 })
 
-io = socket(server)
+const io = require('socket.io')(server)
+
+io.adapter(redis({ host: process.env.REDIS_HOST || '127.0.0.1', port: 6379 }))
 
 io.on('connection', socket => {
   console.log(socket.id, ' is connected.')
