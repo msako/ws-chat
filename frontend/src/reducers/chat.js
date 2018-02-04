@@ -3,14 +3,16 @@ export const types = {
   SEND_MESSAGE: 'SEND_MESSAGE',
   UPDATE_MESSAGE: 'UPDATE_MESSAGE',
   UPDATE_USERNAME: 'UPDATE_USERNAME',
-  SET_ROOM: 'SET_ROOM'
+  SET_ROOM: 'SET_ROOM',
+  UPDATE_POINTS: 'UPDATE_POINTS'
 }
 
 export const initialState = {
   messages: [],
   message: '',
   username: '',
-  room: ''
+  room: '',
+  points: 0
 }
 
 // Reducers
@@ -26,6 +28,8 @@ export default (state = initialState, action) => {
       return { ...state, username: action.payload }
     case types.SET_ROOM:
       return { ...state, room: action.payload }
+    case types.UPDATE_POINTS:
+      return { ...state, points: action.payload }
     default:
       return state
   }
@@ -48,8 +52,12 @@ export const actions = {
     type: types.UPDATE_USERNAME,
     payload: name
   }),
-  setRoom: room => ({
+  setRoom: name => ({
     type: types.SET_ROOM,
-    payload: room
+    payload: name
+  }),
+  updatePoints: value => ({
+    type: types.UPDATE_POINTS,
+    payload: value
   })
 }
