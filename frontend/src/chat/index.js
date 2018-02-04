@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
-import { RaisedButton, Card, TextField } from 'material-ui'
-import io from 'socket.io-client'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { blue300 } from 'material-ui/styles/colors'
+import io from 'socket.io-client'
+
 import { actions } from '../reducers/chat'
 import MessageList from './components/messageList'
+import MessageForm from './components/messageForm'
+import Alert from './components/alert'
 
 class Chat extends Component {
-  componentWillMount() {}
+  state = {
+    open: true
+  }
 
   componentDidMount() {
     this.socket = io(process.env.REACT_APP_WS_URL)
@@ -18,11 +23,33 @@ class Chat extends Component {
     socket.on('connect', () => {
       this.props.setRoom(id)
       socket.emit('room', id)
+      this.startTimer()
     })
 
     socket.on('receive_message', message => {
       this.props.addMessage(message)
     })
+
+    socket.on('update_points', points => {
+      this.props.updatePoints(points)
+    })
+  }
+
+  startTimer = () => {
+    setInterval(() => {
+      this.socket.emit('timer')
+      this.updatePoints() // temporary update on client side
+    }, 5000)
+  }
+
+  // TODO: This must be called from backend with points
+  updatePoints = () => {
+    const points = this.props.chat.points - 10
+    if (points >= 0) {
+      this.props.updatePoints(points)
+    } else {
+      this.handleOpen()
+    }
   }
 
   sendMessage = () => {
@@ -38,40 +65,36 @@ class Chat extends Component {
     this.props.sendMessage()
   }
 
-  onMessageChanged = e => {
+  onMessageChange = e => {
     this.props.updateMessage(e.target.value)
   }
 
-  onUsernameChanged = e => {
+  onUsernameChange = e => {
     this.props.updateUsername(e.target.value)
+  }
+
+  handleOpen = () => {
+    this.setState({ open: true })
+  }
+
+  handleClose = () => {
+    this.setState({ open: false })
   }
 
   render() {
     return (
       <div>
-        <Card>
-          <MessageList messages={this.props.chat.messages} />
-        </Card>
-        <Card>
-          <div style={styles.container}>
-            <TextField
-              hintText="Username"
-              value={this.props.chat.username}
-              onChange={this.onUsernameChanged}
-            />
-            <TextField
-              hintText="Message"
-              value={this.props.chat.message}
-              onChange={this.onMessageChanged}
-            />
-            <RaisedButton
-              label="Send"
-              primary={true}
-              onClick={this.sendMessage}
-              style={styles.button}
-            />
-          </div>
-        </Card>
+        <MessageList messages={this.props.chat.messages} />
+        <MessageForm
+          styles={styles}
+          username={this.props.chat.username}
+          onUsernameChange={this.onUsernameChange}
+          message={this.props.chat.message}
+          onMessageChange={this.onMessageChange}
+          points={this.props.chat.points}
+          sendMessage={this.sendMessage}
+        />
+        <Alert open={this.state.open} handleClose={this.handleClose} />
       </div>
     )
   }
@@ -82,12 +105,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'column',
-    margin: '12px',
-    padding: '12px'
+    margin: 12,
+    padding: 12
   },
   button: {
-    marginTop: '16px'
-  }
+    marginTop: 16
+  },
+  chip: blue300
 }
 
 const mapStateToPros = ({ chat }) => {
