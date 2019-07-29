@@ -9,14 +9,14 @@
     "socket.io-redis": "^5.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
-    "eslint-config-prettier": "^2.9.0",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-prettier": "^2.4.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.5.1",
-    "husky": "^0.14.3",
-    "lint-staged": "^6.1.0",
+    "husky": "^3.0.2",
+    "lint-staged": "^9.2.1",
     "nodemon": "^1.14.12",
     "prettier": "^1.10.2"
   },
